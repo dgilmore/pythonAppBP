@@ -1,4 +1,6 @@
-
+variables:
+  azureSubscription: myAppConnectionString
+  
 trigger:
 - master
 
@@ -28,7 +30,7 @@ steps:
     artifactName: 'drop'# Starter pipeline
 - task: AzureFunctionApp@1
   inputs:
-    azureSubscription: myApp
+    azureSubscription: $(azureSubscription)
     appType: functionAppLinux
     appName: myApp
     #Uncomment the next lines to deploy to a deployment slot
