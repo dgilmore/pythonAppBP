@@ -32,7 +32,7 @@ steps:
   inputs:
     azureSubscription: $(azureSubscription)
     appType: functionAppLinux
-    appName: myApp
+    appName: dgilmore.pythonAppBP
     #Uncomment the next lines to deploy to a deployment slot
     #Note that deployment slots is not supported for Linux Dynamic SKU
     #deployToSlotOrASE: true
