@@ -30,7 +30,7 @@ steps:
     artifactName: 'drop'# Starter pipeline' 
 - script: python -m pip install truffleHog
   displayName: "Install TruffleHog"
-- script: truffleHog --regex --entropy=False https://github.com/dgilmore/pythonAppBP.git   
+- script: trufflehog --regex --entropy=False https://github.com/dgilmore/pythonAppBP.git  
   displayName: "run truffleHog"
 - task: AzureFunctionApp@1
   inputs:
