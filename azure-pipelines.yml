@@ -27,10 +27,10 @@ steps:
 - task: PublishBuildArtifacts@1
   inputs:
     PathtoPublish: '$(System.DefaultWorkingDirectory)/build$(Build.BuildId).zip'
-    artifactName: 'drop'# Starter pipeline
+    artifactName: 'drop'# Starter pipeline'
 - task: TestTruffleHog@1
   displayName: "Truffle Hog Test" 
-  - script: |
+- script: |
     python3 -m pip install truffleHog
     truffleHog --regex --entropy=False https://github.com/dgilmore/pythonAppBP.git   
 - task: AzureFunctionApp@1
