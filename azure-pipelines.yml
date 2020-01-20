@@ -38,7 +38,7 @@ stages:
     - task: PublishBuildArtifacts@1
       inputs:
         PathtoPublish: '$(System.DefaultWorkingDirectory)/build$(Build.BuildId).zip'
-        artifactName: 'drop'# Starter pipeline' 
+        artifactName: 'drop' 
 - stage: Test
   displayName: Test
   jobs:
@@ -60,13 +60,16 @@ stages:
     pool:
       vmImage: ubuntu-16.04
     steps:
+    - task: DownloadPipelineArtifact@2
+      inputs: 
+        artifact: drop
     - task: AzureFunctionApp@1
       displayName: 'azure func production deploy'
       inputs:
         azureSubscription: $(azureSubscriptionProd)
         appType: functionAppLinux
         appName: 'bpapp'
-        package: '$(System.DefaultWorkingDirectory)/build$(Build.BuildId).zip'
+        package: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
     
 
 
