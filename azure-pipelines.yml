@@ -39,7 +39,7 @@ stages:
         archiveFile: "$(System.DefaultWorkingDirectory)/build$(Build.BuildId).zip"
     - task: PublishPipelineArtifact@1
       inputs: 
-        path: $(System.DefaultWorkingDirectory)/bin/WebApp
+        path: "$(System.DefaultWorkingDirectory)/build$(Build.BuildId).zip"
         artifact: WebApp
 - stage: Test
   displayName: Test
