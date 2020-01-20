@@ -62,7 +62,7 @@ stages:
         azureSubscription: $(azureSubscriptionProd)
         appType: functionAppLinux
         appName: 'bpapp'
-        package: '$(Pipeline.Workspace)/WebApp/$(Build.BuildId).zip'
+        package: '$(Pipeline.Workspace)/WebApp/*.zip'
     
 
 
