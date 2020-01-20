@@ -49,7 +49,7 @@ stages:
       displayName: "Install TruffleHog"
     - script: trufflehog --regex --entropy=False https://github.com/dgilmore/pythonAppBP.git  
       displayName: "run truffleHog"
-- stage: Deploy Prod
+- stage: Production
   displayName: Deploy to Production
   dependsOn: Build
   condition: succeeded()
