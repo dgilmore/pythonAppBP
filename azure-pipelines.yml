@@ -46,7 +46,7 @@ stages:
         artifact: WebApp
     - script: |
         python -m pip install truffleHog
-        trufflehog --regex --entropy=False https://github.com/dgilmore/pythonAppBP.git
+        trufflehog https://github.com/dgilmore/pythonAppBP.git
 
 - stage: QA
   displayName: Deploy to QA
