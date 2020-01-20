@@ -55,22 +55,17 @@ stages:
   condition: succeeded()
 
   jobs:
-  - deployment: Deploy
-    displayName: Deploy
-    enviroment: 'production'
+  - job: 
+    displayName: deploy to production
     pool:
       vmImage: ubuntu-16.04
-    strategy:
-      runOnce:
-      deploy:
-
-        steps:
-        - task: AzureFunctionApp@1
-          displayName: 'azure func production deploy'
-          inputs:
-            azureSubscription: $(azureSubscriptionProd)
-            appType: functionAppLinux
-            appName: 'bpapp'
+    steps:
+    - task: AzureFunctionApp@1
+      displayName: 'azure func production deploy'
+      inputs:
+        azureSubscription: $(azureSubscriptionProd)
+        appType: functionAppLinux
+        appName: 'bpapp'
     
 
 
