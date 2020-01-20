@@ -41,16 +41,7 @@ stages:
       inputs: 
         path: "$(System.DefaultWorkingDirectory)/build$(Build.BuildId).zip"
         artifact: WebApp
-- stage: Test
-  displayName: Test
-  jobs:
-  - job:
-    displayName: Test
-    steps:
-    - script: python -m pip install truffleHog
-      displayName: "Install TruffleHog"
-    - script: truffleHog --regex --entropy=False https://github.com/dgilmore/pythonAppBP.git  
-      displayName: "run truffleHog"
+
 - stage: Production
   displayName: Deploy to Production
   dependsOn: Build
