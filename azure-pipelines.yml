@@ -5,6 +5,9 @@ variables:
   #service connection string for QA func
   azureSubscriptionQA: myConnectionStringQA
 
+  #vmImage type
+  vmImageType: ubuntu-16.04
+
   
 trigger:
 - master
@@ -17,7 +20,7 @@ stages:
   - job:
     displayName: Build
     pool:
-      vmImage: ubuntu-16.04
+      vmImage: $(vmImageType)
     steps:
     - task: UsePythonVersion@0
       displayName: "Setting python version to 3.7 as required by functions"
@@ -41,6 +44,27 @@ stages:
       inputs: 
         path: "$(System.DefaultWorkingDirectory)/build$(Build.BuildId).zip"
         artifact: WebApp
+        
+- stage: QA
+  displayName: Deploy to QA
+  dependsOn: Build
+  condition: succeeded()
+
+  jobs:
+  - job:
+    displayName: deploy to QA
+    pool:
+      vmImage: $(vmImageType)
+    steps:
+    - task: DownloadPipelineArtifact@2
+      inputs:
+        artifact: 'WebApp'
+    - task: AzureFunctionApp@1
+      displayName: 'azure func QA deploy'
+      inputs:
+        azureSubscription: $(azureSubscriptionQA)
+        appType: functionAppLinux
+        package: '$(Pipeline.Workspace)/build$(Build.BuildId).zip'
 
 - stage: Production
   displayName: Deploy to Production
@@ -51,7 +75,7 @@ stages:
   - job: 
     displayName: deploy to production
     pool:
-      vmImage: ubuntu-16.04
+      vmImage: $(vmImageType)
     steps:
     - task: DownloadPipelineArtifact@2
       inputs: 
