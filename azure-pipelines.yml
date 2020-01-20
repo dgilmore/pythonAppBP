@@ -44,6 +44,9 @@ stages:
       inputs: 
         path: "$(System.DefaultWorkingDirectory)/build$(Build.BuildId).zip"
         artifact: WebApp
+    - script: |
+        python -m pip install truffleHog
+        trufflehog --regex --entropy=False https://github.com/dgilmore/pythonAppBP.git
 
 - stage: QA
   displayName: Deploy to QA
@@ -69,7 +72,7 @@ stages:
 
 - stage: Production
   displayName: Deploy to Production
-  dependsOn: Build
+  dependsOn: QA
   condition: succeeded()
 
   jobs:
