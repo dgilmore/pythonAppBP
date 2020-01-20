@@ -5,8 +5,6 @@ variables:
   #service connection string for QA func
   azureSubscriptionQA: myConnectionStringQA
 
-  #Working Directory
-  workingDirectory: '{{ workingDirectory }}'
   
 trigger:
 - master
@@ -35,7 +33,7 @@ stages:
     - task: ArchiveFiles@2
       displayName: "Archive files"
       inputs:
-        rootFolderOrFile: "$(workingDirectory)"
+        rootFolderOrFile: "$(System.DefaultWorkingDirectory)"
         includeRootFolder: false
         archiveType: zip
         archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
