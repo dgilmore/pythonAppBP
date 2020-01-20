@@ -70,7 +70,7 @@ stages:
         azureSubscription: $(azureSubscriptionProd)
         appType: functionAppLinux
         appName: 'bpapp'
-        package: '$(Build.SourcesDirectory)/bin/drop'
+        package: '$(Build.SourcesDirectory)/bin/drop/$(Build.BuildId).zip'
     
 
 
