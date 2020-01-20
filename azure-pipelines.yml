@@ -47,7 +47,7 @@ stages:
     steps:
     - script: python -m pip install truffleHog
       displayName: "Install TruffleHog"
-    - script: trufflehog --regex --entropy=False https://github.com/dgilmore/pythonAppBP.git  
+    - script: truffleHog --regex --entropy=False https://github.com/dgilmore/pythonAppBP.git  
       displayName: "run truffleHog"
 - stage: Production
   displayName: Deploy to Production
@@ -66,6 +66,7 @@ stages:
         azureSubscription: $(azureSubscriptionProd)
         appType: functionAppLinux
         appName: 'bpapp'
+        package: '$(System.DefaultWorkingDirectory)/build$(Build.BuildId).zip'
     
 
 
