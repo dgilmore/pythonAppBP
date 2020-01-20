@@ -1,47 +1,77 @@
 variables:
-  azureSubscription: myAppConnectionString
+  #service connection string for production func
+  azureSubscriptionProd: myAppConnectionString
+
+  #service connection string for QA func
+  azureSubscriptionQA: myConnectionStringQA
   
 trigger:
 - master
 
-pool:
-  vmImage: ubuntu-16.04
-steps:
-- task: UsePythonVersion@0
-  displayName: "Setting python version to 3.7 as required by functions"
-  inputs:
-    versionSpec: '3.7'
-    architecture: 'x64'
-- bash: |
-    if [ -f extensions.csproj ]
-    then
-        dotnet build extensions.csproj --output ./bin
-    fi
-    pip install --target="./.python_packages/lib/site-packages" -r ./requirements.txt
-- task: ArchiveFiles@2
-  displayName: "Archive files"
-  inputs:
-    rootFolderOrFile: "$(System.DefaultWorkingDirectory)"
-    includeRootFolder: false
-    archiveFile: "$(System.DefaultWorkingDirectory)/build$(Build.BuildId).zip"
-- task: PublishBuildArtifacts@1
-  inputs:
-    PathtoPublish: '$(System.DefaultWorkingDirectory)/build$(Build.BuildId).zip'
-    artifactName: 'drop'# Starter pipeline' 
-- script: python -m pip install truffleHog
-  displayName: "Install TruffleHog"
-- script: trufflehog --regex --entropy=False https://github.com/dgilmore/pythonAppBP.git  
-  displayName: "run truffleHog"
-- task: AzureFunctionApp@1
-  inputs:
-    azureSubscription: $(azureSubscription)
-    appType: functionAppLinux
-    appName: 'bpapp'
-    #Uncomment the next lines to deploy to a deployment slot
-    #Note that deployment slots is not supported for Linux Dynamic SKU
-    #deployToSlotOrASE: true
-    #resourceGroupName: '<Resource Group Name>'
-    #slotName: '<Slot name>'
+stages:
+- stage: Build
+  displayName: Build Stage
+
+  jobs:
+  - job:
+    displayName: Build
+    pool:
+      vmImage: ubuntu-16.04
+    steps:
+    - task: UsePythonVersion@0
+      displayName: "Setting python version to 3.7 as required by functions"
+      inputs:
+        versionSpec: '3.7'
+        architecture: 'x64'
+    - bash: |
+        if [ -f extensions.csproj ]
+        then
+            dotnet build extensions.csproj --output ./bin
+        fi
+        pip install --target="./.python_packages/lib/site-packages" -r ./requirements.txt
+    - task: ArchiveFiles@2
+      displayName: "Archive files"
+      inputs:
+        rootFolderOrFile: "$(System.DefaultWorkingDirectory)"
+        includeRootFolder: false
+        archiveFile: "$(System.DefaultWorkingDirectory)/build$(Build.BuildId).zip"
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(System.DefaultWorkingDirectory)/build$(Build.BuildId).zip'
+        artifactName: 'drop'# Starter pipeline' 
+- stage: Test
+  displayName: Test
+  jobs:
+  - job:
+    displayName: Test
+    steps:
+    - script: python -m pip install truffleHog
+      displayName: "Install TruffleHog"
+    - script: trufflehog --regex --entropy=False https://github.com/dgilmore/pythonAppBP.git  
+      displayName: "run truffleHog"
+- stage: Deploy Prod
+  displayName: Deploy to Production
+  dependsOn: Build
+  condition: succeeded()
+
+  jobs:
+  - deployment: Deploy
+    displayName: Deploy
+    enviroment: 'production'
+    pool:
+      vmImage: ubuntu-16.04
+    strategy:
+      runOnce:
+      deploy:
+
+        steps:
+        - task: AzureFunctionApp@1
+          displayName: 'azure func production deploy'
+          inputs:
+            azureSubscription: $(azureSubscriptionProd)
+            appType: functionAppLinux
+            appName: 'bpapp'
+    
 
 
 
