@@ -72,7 +72,7 @@ stages:
 
 - stage: Test
   displayName: Test QA Endpoint
-  dependsOn: Build
+  dependsOn: QA
   condition: succeeded()
   jobs:
   - job: 
@@ -89,6 +89,13 @@ stages:
           exit 1
         fi
 
+        STATUS==$(curl -s -o /dev/null -w "%{http_code}" https://bpapp-qa.azurewebsites.net/api/HttpExample?name=mark)
+        if [ $STATUS -eq 200 ];then
+          echo "Status $STATUS: Passed"
+        else
+          echo "Got $STATUS"
+          exit 1
+        fi
 - stage: Production
   displayName: Deploy to Production
   dependsOn: Test
