@@ -33,7 +33,11 @@ stages:
             dotnet build extensions.csproj --output ./bin
         fi
         pip install --target="./.python_packages/lib/site-packages" -r ./requirements.txt
-        ls
+        python -m pip install truffleHog
+        trufflehog https://github.com/dgilmore/pythonAppBP.git
+        python -m pip install flake8
+        flake8 /HttpExample/__init__.py
+      displayName: Install Dependency and Test
     - task: ArchiveFiles@2
       displayName: "Archive files"
       inputs:
@@ -45,11 +49,6 @@ stages:
       inputs: 
         path: "$(System.DefaultWorkingDirectory)/build$(Build.BuildId).zip"
         artifact: WebApp
-    - script: |
-        python -m pip install truffleHog
-        trufflehog https://github.com/dgilmore/pythonAppBP.git
-        python -m pip install flake8
-      displayName: "Run Build Tests"
 
 - stage: QA
   displayName: Deploy to QA
