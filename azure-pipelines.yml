@@ -89,7 +89,7 @@ stages:
           exit 1
         fi
 
-        STATUS==$(curl -s -o /dev/null -w "%{http_code}" https://bpapp-qa.azurewebsites.net/api/HttpExample?name=mark)
+        STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://bpapp-qa.azurewebsites.net/api/HttpExample?name=mark)
         if [ $STATUS -eq 200 ];then
           echo "Status $STATUS: Passed"
         else
