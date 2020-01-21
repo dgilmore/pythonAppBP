@@ -70,9 +70,28 @@ stages:
         appName: 'BPapp-QA'
         package: '$(Pipeline.Workspace)/build$(Build.BuildId).zip'
 
+- stage: Test
+  displayName: Test QA Endpoint
+  dependsOn: Build
+  condition: succeeded()
+  jobs:
+  - job: 
+    displayName: Test QA Endpoint
+    pool:
+      vmImage: $(vmImageType)
+    steps:
+    - bash: |
+        STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://bpapp-qa.azurewebsites.net/api/HttpExample)
+        if [ $STATUS -eq 400 ];then
+          echo "Status 400: Passed"
+        else
+          echo "Got $STATUS"
+          exit 1
+        fi
+
 - stage: Production
   displayName: Deploy to Production
-  dependsOn: QA
+  dependsOn: Test
   condition: succeeded()
 
   jobs:
