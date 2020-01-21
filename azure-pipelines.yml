@@ -35,8 +35,6 @@ stages:
         pip install --target="./.python_packages/lib/site-packages" -r ./requirements.txt
         python -m pip install truffleHog
         trufflehog https://github.com/dgilmore/pythonAppBP.git
-        python -m pip install flake8
-        flake8 /HttpExample/__init__.py
       displayName: Install Dependency and Test
     - task: ArchiveFiles@2
       displayName: "Archive files"
