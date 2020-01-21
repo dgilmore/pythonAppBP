@@ -8,10 +8,11 @@ variables:
   #vmImage type
   vmImageType: ubuntu-16.04
 
-  
+#my github repo triggers a build when a commit is made to master
 trigger:
 - master
 
+#Build Stage. Installs dependencies, scans repo for secrets and zips source files
 stages:
 - stage: Build
   displayName: Build Stage
@@ -48,6 +49,7 @@ stages:
         path: "$(System.DefaultWorkingDirectory)/build$(Build.BuildId).zip"
         artifact: WebApp
 
+#this stage deploys build to a test server
 - stage: QA
   displayName: Deploy to QA
   dependsOn: Build
@@ -70,6 +72,7 @@ stages:
         appName: 'BPapp-QA'
         package: '$(Pipeline.Workspace)/build$(Build.BuildId).zip'
 
+#this stage tests the endpoints create on QA build before deploying to production
 - stage: Test
   displayName: Test QA Endpoint
   dependsOn: QA
@@ -96,6 +99,8 @@ stages:
           echo "Got $STATUS"
           exit 1
         fi
+
+#finally the build is deployed to production
 - stage: Production
   displayName: Deploy to Production
   dependsOn: Test
