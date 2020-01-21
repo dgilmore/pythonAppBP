@@ -15,8 +15,7 @@ Now that my repository was configured with the project, I could create service c
 
 My functions are registered, my devops project is watching my github repo and my service connections are in place. I can start to build my yaml file. I start with one stage, that installs dependencies, builds the project and deploys the build artifact to my production function. I then add the build testing, specifically the trufflehog scanning that was a requirment on this exercise. I added a false aws token to my .yaml file and built the project again. The following image shows that the test found a string displaying high entropy over 20 characters and terminated the build.
 
-![image of truffleHog test]
-(https://imgur.com/0T0r3Ib)
+![image of truffleHog test](https://i.imgur.com/0T0r3Ib.png)
 
 I then seperated my build and release into stages. I started with just the production function and then added the QA function stage. My biggest struggle here was how to pass the build artifact from the build stage to the deploy stages, I found the pre-defined tasks publishPipelineArtifacts and DownloadPipelineArtifacts very useful. I added a testing stage between my QA and production, to make sure that the endpoint was behaving properly before releasing the build to production. 
 
@@ -33,12 +32,10 @@ I want do a quick runthrough of the prompt I was given and how my project has ad
   - I left my Azure DevOps pipeline as public, although I am not sure if you will actually be able to go and check it out. Here is the linke the the project: https://dev.azure.com/davidgilmoreinnis/BP_ASSESSMENT_PIPELINE
   - On the chance that you cannot look at the project yourself, I am providing screen shots of a pipeline successfully built and one that fails because the Test stage failed.
   
-  ![image of successful build]
-  (https://imgur.com/kivTvPW)
+  ![Imgur](https://i.imgur.com/kivTvPW.png)
   ###### Successful build
   
-  ![image of failed build]
-  (https://imgur.com/YGJdFZz)
+  ![image of failed build](https://i.imgur.com/YGJdFZz.png)
   ###### Failed Build
   
  * Create a release pipeline that deploys a multi-stage (multi-environment) pipeline with stages that reflect a realistic route-to-live.
