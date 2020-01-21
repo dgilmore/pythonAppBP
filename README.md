@@ -5,6 +5,7 @@ Having fun deploying serverless web apps using Azure
 My app accepts a query string in the url, specifically a name. The app then returns a message including the name and a status code of 200. If no query string is included, the app returns a message as well as a 400 status code. 
 
 *You can hit the QA Serverless func here:* https://bpapp-qa.azurewebsites.net/api/HttpExample
+
 *You can hit the Prod Serverless func here:* https://bpapp.azurewebsites.net/api/HttpExample
 
 ### My Path to Muli-stage
@@ -41,7 +42,7 @@ I want do a quick runthrough of the prompt I was given and how my project has ad
   ###### Failed Build
   
  * Create a release pipeline that deploys a multi-stage (multi-environment) pipeline with stages that reflect a realistic route-to-live.
- - At this stage, I began to have a lot of questions that were getting harder to find the answers. I seperated my pipeline into stages, I create seperate enviroments for testing and production, and I did my best to include helpful tests. I really found a wide variety of answers and opinions on the how a pipeline should be configured and I have to believe that there are a ton of other factors that help mold a solution. 
+   - At this stage, I began to have a lot of questions that were getting harder to find the answers. I seperated my pipeline into stages, I create seperate enviroments for testing and production, and I did my best to include helpful tests. I really found a wide variety of answers and opinions on the how a pipeline should be configured and I have to believe that there are a ton of other factors that help mold a solution. 
  
 * Create a pipeline that deploys your Python app as an Azure Function
   - I have!
